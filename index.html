@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Водич и Партнёры</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .title {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: #6b7280;
+      margin-bottom: 32px;
+    }
+    .button {
+      display: block;
+      width: 100%;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    .btn-secondary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    .btn-info {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Водич и Партнёры</h1>
+      <p class="subtitle">Выберите нужный раздел</p>
+    </div>
+
+    <a href="#" class="button btn-primary" onclick="handleAction('question')">
+      ❓ Задать вопрос юристу
+    </a>
+
+    <a href="#" class="button btn-secondary" onclick="handleAction('topic')">
+      💡 Предложить тему
+    </a>
+
+    <a href="#" class="button btn-accent" onclick="handleAction('feedback')">
+      ⭐ Оставить отзыв
+    </a>
+
+    <a href="#" class="button btn-info" onclick="handleAction('contacts')">
+      📞 Контакты
+    </a>
+
+    <div class="footer">
+      Мини-приложение для MAX
+    </div>
+  </div>
+
+  <script>
+    // MAX WebApp Bridge (если нужно взаимодействие с MAX)
+    window.WebApp = window.WebApp || {};
+    window.WebApp.initData = window.WebApp.initData || '';
+    window.WebApp.initDataUnsafe = window.WebApp.initDataUnsafe || {};
+
+    function handleAction(action) {
+      // Здесь твоя логика для каждой кнопки
+      switch(action) {
+        case 'question':
+          showForm('Задать вопрос юристу', 'Напишите ваш вопрос:');
+          break;
+        case 'topic':
+          showForm('Предложить тему', 'Какая тема вас интересует?');
+          break;
+        case 'feedback':
+          showForm('Оставить отзыв', 'Оцените нас и напишите комментарий:');
+          break;
+        case 'contacts':
+          showContacts();
+          break;
+      }
+    }
+
+    function showForm(title, placeholder) {
+      const form = `
+        <div class="form-overlay">
+          <div class="form-card">
+            <h3>${title}</h3>
+            <textarea id="formInput" placeholder="${placeholder}" rows="5" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px;"></textarea>
+            <div style="margin-top:16px;">
+              <button onclick="sendForm()" class="button btn-primary" style="width:48%;margin-right:4%;">Отправить</button>
+              <button onclick="closeForm()" class="button" style="width:48%;background:#6b7280;">Отмена</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', form);
+    }
+
+    function sendForm() {
+      const input = document.getElementById('formInput').value;
+      alert(`Отправлено: ${input}\n\n(Тут отправка на твой сервер)`);
+      closeForm();
+    }
+
+    function closeForm() {
+      document.querySelector('.form-overlay').remove();
+    }
+
+    function showContacts() {
+      alert(`
+📞 Контакты
+Телефон: +7 (999) 123-45-67
+Email: info@vodich.ru
+Адрес: Москва, ул. Ленина, 1
+      `);
+    }
+  </script>
+</body>
+</html>
