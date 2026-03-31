@@ -1,122 +1,64 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>АО "СУШИМАГ"</title>
-
-<!-- ✅ MAX BRIDGE - ОБЯЗАТЕЛЬНО! -->
-<script src="https://st.max.ru/js/max-web-app.js"></script>
-
-<style>
-body {
-font-family: Arial, sans-serif;
-background: #f8f9fa;
-padding: 20px;
-max-width: 400px;
-margin: 0 auto;
-}
-.header { text-align: center; margin-bottom: 30px; }
-.title {
-font-size: 28px;
-color: #e74c3c;
-margin-bottom: 10px;
-font-weight: bold;
-}
-.subtitle { color: #7f8c8d; margin-bottom: 20px; }
-button {
-width: 100%;
-padding: 15px;
-margin: 10px 0;
-border: none;
-border-radius: 12px;
-font-size: 16px;
-color: white;
-cursor: pointer;
-}
-.btn-topic { background: #27ae60; }
-.btn-feedback { background: #f39c12; }
-.btn-contacts { background: #3498db; }
-.footer { text-align: center; margin-top: 20px; font-size: 12px; color: #95a5a6; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>СУШИМАГ Отзыв</title>
+  <script src="https://st.max.ru/js/max-web-app.js"></script>
+  <style>
+    body { font-family: -apple-system, sans-serif; padding: 20px; max-width: 400px; margin: auto; }
+    textarea { width: 100%; height: 120px; border: 1px solid #ddd; border-radius: 8px; padding: 12px; box-sizing: border-box; }
+    button { width: 100%; height: 44px; background: #0088cc; color: white; border: none; border-radius: 8px; font-size: 16px; margin-top: 12px; }
+  </style>
 </head>
 <body>
-<div class="header">
-<h1 class="title">АО "СУШИМАГ"</h1>
-<p class="subtitle">Выберите нужный раздел</p>
-</div>
+  <h2>📝 Отзыв в СУШИМАГ</h2>
+  <textarea id="formInput" placeholder="Что понравилось? Время, суши, сервис..."></textarea>
+  <button onclick="sendForm()">Отправить</button>
 
-<button class="btn-topic" onclick="handleAction('topic')">💡 Предложить тему</button>
-<button class="btn-feedback" onclick="handleAction('feedback')">⭐ Оставить отзыв</button>
-<button class="btn-contacts" onclick="handleAction('contacts')">📞 Контакты</button>
+  <script>
+    // ✅ SAFE WebApp (фикс ошибок)
+    window.WebAppReady?.();
+    if (window.WebApp?.expand) window.WebApp.expand();
 
-<div class="footer">Мини-приложение для MAX</div>
+    // Proxy URL
+    const JETBOT_WEBHOOK = 'https://corsproxy.io/?' + encodeURIComponent('https://api.jetbot24.ru/hook/674464:xTElBBMqfRILA6lmAhn4fPUqFSuYEmTeCGZ2SsaILbyz31JQ');
 
-<script>
-// ✅ MAX Bridge инициализация
-window.WebApp.ready();
-window.WebApp.expand();
+    async function sendForm() {
+      console.log('🚀 sendForm вызвана!');
+      const input = document.getElementById('formInput').value.trim();
+      
+      if (!input) {
+        alert('Напишите отзыв');
+        return;
+      }
 
-// Твой JetBot webhook
-const JETBOT_WEBHOOK = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://api.jetbot24.ru/hook/674464:xTElBBMqfRILA6lmAhn4fPUqFSuYEmTeCGZ2SsaILbyz31JQ');
+      try {
+        console.log('📤 Отправка на proxy...');
+        const response = await fetch(JETBOT_WEBHOOK, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            message: input,
+            type: 'СУШИМАГ отзыв',
+            user: window.WebApp?.initDataUnsafe?.user || {id: 'browser'},
+            timestamp: new Date().toLocaleString('ru-RU')
+          })
+        });
 
-function handleAction(action) {
-if (action === 'contacts') {
-showContacts();
-} else {
-showForm(action === 'topic' ? 'Предложить тему' : 'Оставить отзыв',
-action === 'topic' ? 'Какая тема вас интересует?' : 'Оцените нас и напишите комментарий:');
-}
-}
+        console.log('📥 Response:', response.status, await response.text());
 
-function showForm(title, placeholder) {
-const form = document.createElement('div');
-form.innerHTML = `
-<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;">
-<div style="background:white;border-radius:20px;padding:24px;max-width:90%;max-height:80%;">
-<h3 style="margin-bottom:16px;font-size:20px;">${title}</h3>
-<textarea id="formInput" placeholder="${placeholder}" rows="5" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;"></textarea>
-<div style="margin-top:16px;">
-<button onclick="sendForm()" style="width:48%;margin-right:4%;padding:12px;background:#27ae60;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Отправить</button>
-<button onclick="closeForm()" style="width:48%;padding:12px;background:#95a5a6;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Отмена</button>
-</div>
-</div>
-</div>
-`;
-document.body.appendChild(form.firstElementChild);
-document.getElementById('formInput').focus();
-}
-
-async function sendForm() {
-const input = document.getElementById('formInput').value.trim();
-if (!input) return alert('Напишите сообщение');
-
-try {
-await fetch(JETBOT_WEBHOOK, {
-method: 'POST',
-headers: {'Content-Type': 'application/json'},
-body: JSON.stringify({
-message: input,
-type: document.querySelector('h3')?.textContent || 'Сообщение',
-timestamp: new Date().toLocaleString('ru-RU'),
-source: 'sushimag'
-})
-});
-alert('✅ Отправлено!');
-window.WebApp.close();
-} catch(e) {
-alert('❌ Ошибка отправки');
-}
-closeForm();
-}
-
-function closeForm() {
-document.querySelector('[style*="position:fixed"]')?.remove();
-}
-
-function showContacts() {
-alert('📞 АО "СУШИМАГ"\n+7 (903) 193-75-53\nsupport@sushi-m.net\n358009, Элиста, мкр. 3, д. 4, помещ. 26');
-}
-</script>
+        if (response.ok) {
+          alert('✅ Отправлено в СУШИМАГ!');
+          document.getElementById('formInput').value = '';
+        } else {
+          throw new Error(`Status: ${response.status}`);
+        }
+      } catch(e) {
+        console.error('❌ Ошибка:', e);
+        alert('❌ Ошибка: ' + e.message);
+      }
+    }
+  </script>
 </body>
 </html>
