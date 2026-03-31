@@ -4,59 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>СУШИМАГ Отзыв</title>
-  <script src="https://st.max.ru/js/max-web-app.js"></script>
-  <style>
-    body { font-family: -apple-system, sans-serif; padding: 20px; max-width: 400px; margin: auto; }
-    textarea { width: 100%; height: 120px; border: 1px solid #ddd; border-radius: 8px; padding: 12px; box-sizing: border-box; }
-    button { width: 100%; height: 44px; background: #0088cc; color: white; border: none; border-radius: 8px; font-size: 16px; margin-top: 12px; }
-  </style>
+  <!-- ❌ УБРАЛ max-web-app.js -->
+  <style>/* тот же стиль */</style>
 </head>
 <body>
   <h2>📝 Отзыв в СУШИМАГ</h2>
-  <textarea id="formInput" placeholder="Что понравилось? Время, суши, сервис..."></textarea>
+  <textarea id="formInput" placeholder="Что понравилось?"></textarea>
   <button onclick="sendForm()">Отправить</button>
 
   <script>
-    // ✅ SAFE WebApp (фикс ошибок)
-    window.WebAppReady?.();
-    if (window.WebApp?.expand) window.WebApp.expand();
+    // ✅ Fake WebApp без ошибок
+    window.WebApp = {
+      initDataUnsafe: {user: {id: 999, first_name: 'Браузер'}},
+      close: () => alert('Готово!')
+    };
 
-    // Proxy URL
     const JETBOT_WEBHOOK = 'https://corsproxy.io/?' + encodeURIComponent('https://api.jetbot24.ru/hook/674464:xTElBBMqfRILA6lmAhn4fPUqFSuYEmTeCGZ2SsaILbyz31JQ');
 
     async function sendForm() {
-      console.log('🚀 sendForm вызвана!');
+      console.log('🚀 ОТПРАВКА!');
       const input = document.getElementById('formInput').value.trim();
-      
-      if (!input) {
-        alert('Напишите отзыв');
-        return;
-      }
+      if (!input) return alert('Текст?');
 
       try {
-        console.log('📤 Отправка на proxy...');
-        const response = await fetch(JETBOT_WEBHOOK, {
+        const res = await fetch(JETBOT_WEBHOOK, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            message: input,
-            type: 'СУШИМАГ отзыв',
-            user: window.WebApp?.initDataUnsafe?.user || {id: 'browser'},
-            timestamp: new Date().toLocaleString('ru-RU')
-          })
+          body: JSON.stringify({message: input, test: 'browser'})
         });
-
-        console.log('📥 Response:', response.status, await response.text());
-
-        if (response.ok) {
-          alert('✅ Отправлено в СУШИМАГ!');
-          document.getElementById('formInput').value = '';
-        } else {
-          throw new Error(`Status: ${response.status}`);
-        }
+        console.log('✅', res.status);
+        alert('✅ В СУШИМАГ!');
       } catch(e) {
-        console.error('❌ Ошибка:', e);
-        alert('❌ Ошибка: ' + e.message);
+        console.error(e);
+        alert('❌ ' + e);
       }
     }
   </script>
