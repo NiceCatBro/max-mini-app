@@ -1,9 +1,12 @@
+Вот обновлённый код мини-приложения АО "СУШИМАГ" без пункта "Задать вопрос юристу". Сохрани как index.html и размести на GitHub Pages.
+
+xml
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Водич и Партнёры</title>
+  <title>АО "СУШИМАГ"</title>
   <style>
     * {
       box-sizing: border-box;
@@ -28,7 +31,7 @@
     .title {
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -59,7 +62,7 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
     .btn-primary {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
     }
     .btn-secondary {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -81,13 +84,9 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1 class="title">Водич и Партнёры</h1>
+      <h1 class="title">АО "СУШИМАГ"</h1>
       <p class="subtitle">Выберите нужный раздел</p>
     </div>
-
-    <a href="#" class="button btn-primary" onclick="handleAction('question')">
-      ❓ Задать вопрос юристу
-    </a>
 
     <a href="#" class="button btn-secondary" onclick="handleAction('topic')">
       💡 Предложить тему
@@ -107,17 +106,13 @@
   </div>
 
   <script>
-    // MAX WebApp Bridge (если нужно взаимодействие с MAX)
+    // MAX WebApp Bridge
     window.WebApp = window.WebApp || {};
     window.WebApp.initData = window.WebApp.initData || '';
     window.WebApp.initDataUnsafe = window.WebApp.initDataUnsafe || {};
 
     function handleAction(action) {
-      // Здесь твоя логика для каждой кнопки
       switch(action) {
-        case 'question':
-          showForm('Задать вопрос юристу', 'Напишите ваш вопрос:');
-          break;
         case 'topic':
           showForm('Предложить тему', 'Какая тема вас интересует?');
           break;
@@ -132,11 +127,11 @@
 
     function showForm(title, placeholder) {
       const form = `
-        <div class="form-overlay">
-          <div class="form-card">
-            <h3>${title}</h3>
-            <textarea id="formInput" placeholder="${placeholder}" rows="5" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px;"></textarea>
-            <div style="margin-top:16px;">
+        <div class="form-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;">
+          <div class="form-card" style="background:white;border-radius:20px;padding:24px;max-width:90%;max-height:80%;overflow:auto;">
+            <h3 style="margin-bottom:16px;">${title}</h3>
+            <textarea id="formInput" placeholder="${placeholder}" rows="5" style="width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px;margin-bottom:16px;"></textarea>
+            <div>
               <button onclick="sendForm()" class="button btn-primary" style="width:48%;margin-right:4%;">Отправить</button>
               <button onclick="closeForm()" class="button" style="width:48%;background:#6b7280;">Отмена</button>
             </div>
@@ -148,7 +143,7 @@
 
     function sendForm() {
       const input = document.getElementById('formInput').value;
-      alert(`Отправлено: ${input}\n\n(Тут отправка на твой сервер)`);
+      alert(`Отправлено в АО "СУШИМАГ":\n\n${input}\n\n(Тут отправка на сервер)`);
       closeForm();
     }
 
@@ -158,10 +153,10 @@
 
     function showContacts() {
       alert(`
-📞 Контакты
+📞 Контакты АО "СУШИМАГ"
 Телефон: +7 (999) 123-45-67
-Email: info@vodich.ru
-Адрес: Москва, ул. Ленина, 1
+Email: info@sushimag.ru
+Адрес: Москва, ул. Сахалинская, 1
       `);
     }
   </script>
