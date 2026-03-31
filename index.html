@@ -56,12 +56,15 @@
   </div>
 
   <script>
-    const BOT_TOKEN = 'f9LHodD0cOJqll5jrDjyGruQpq832UmduQNCpc4S5fj93ELaamgvBDtytTlioi0fEkJfWE2hD-1pRM8gOCNX';
-    const ADMIN_CHAT_ID = '105645041';
-
-    window.WebApp = window.WebApp || {};
-    window.WebApp.initData = window.WebApp.initData || '';
-    window.WebApp.initDataUnsafe = window.WebApp.initDataUnsafe || {};
+    // ✅ Официальная инициализация MAX WebApp
+    let webApp;
+    try {
+      webApp = window.Telegram?.WebApp || window.WebApp;
+      webApp.ready();
+      webApp.expand();
+    } catch(e) {
+      console.log('WebApp недоступен (тестовый режим)');
+    }
 
     function handleAction(action) {
       switch(action) {
@@ -87,37 +90,28 @@
       document.body.insertAdjacentHTML('beforeend', form);
     }
 
-    async function sendForm() {
+    function sendForm() {
       const input = document.getElementById('formInput').value.trim();
-      if (!input) { alert('❌ Напишите сообщение'); return; }
-
-      try {
-        const response = await fetch(`https://platform-api.max.ru/messages`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${BOT_TOKEN}`
-          },
-          body: JSON.stringify({
-            chat_id: ADMIN_CHAT_ID,
-            text: `🔔 НОВОЕ СООБЩЕНИЕ из АО "СУШИМАГ"\n\n📝 ${input}\n\n⏰ ${new Date().toLocaleString('ru-RU')}\n👤 Через мини-приложение`,
-            parse_mode: 'HTML'
-          })
-        });
-
-        const result = await response.json();
-        
-        if (response.ok) {
-          alert('✅ Отправлено в MAX!');
-          console.log('Успех:', result);
-        } else {
-          throw new Error(`Ошибка ${response.status}: ${result.message || 'Неизвестная ошибка'}`);
-        }
-      } catch (error) {
-        alert(`❌ Ошибка: ${error.message}`);
-        console.error('Детали:', error);
+      if (!input) { 
+        alert('❌ Напишите сообщение'); 
+        return; 
       }
-      
+
+      // ✅ ОФИЦИАЛЬНЫЙ WebApp.sendData для MAX
+      if (webApp && webApp.sendData) {
+        webApp.sendData(JSON.stringify({
+          type: 'sushimag_message',
+          action: document.querySelector('.form-card h3').textContent,
+          text: input,
+          timestamp: new Date().toLocaleString('ru-RU'),
+          user: webApp.initDataUnsafe?.user ? `${webApp.initDataUnsafe.user.first_name || ''} ${webApp.initDataUnsafe.user.last_name || ''}` : 'Гость'
+        }));
+        alert('✅ Данные отправлены боту АО "СУШИМАГ"!');
+        webApp.close(); // Закрываем мини-приложение
+      } else {
+        // Fallback для браузерного теста
+        alert(`📝 Текст для бота:\n${input}\n\n(В JetBot обработай web_app_data)`);
+      }
       closeForm();
     }
 
