@@ -3,42 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>СУШИМАГ Отзыв</title>
-  <!-- ❌ УБРАЛ max-web-app.js -->
-  <style>/* тот же стиль */</style>
+  <title>СУШИМАГ</title>
+  <style>body{padding:20px;max-width:400px;margin:auto;font-family:sans-serif;}textarea{width:100%;height:120px;border:1px solid #ddd;border-radius:8px;padding:12px;box-sizing:border-box;}button{width:100%;height:44px;background:#0088cc;color:white;border:none;border-radius:8px;font-size:16px;margin-top:12px;}</style>
 </head>
 <body>
-  <h2>📝 Отзыв в СУШИМАГ</h2>
-  <textarea id="formInput" placeholder="Что понравилось?"></textarea>
-  <button onclick="sendForm()">Отправить</button>
-
-  <script>
-    // ✅ Fake WebApp без ошибок
-    window.WebApp = {
-      initDataUnsafe: {user: {id: 999, first_name: 'Браузер'}},
-      close: () => alert('Готово!')
-    };
-
-    const JETBOT_WEBHOOK = 'https://corsproxy.io/?' + encodeURIComponent('https://api.jetbot24.ru/hook/674464:xTElBBMqfRILA6lmAhn4fPUqFSuYEmTeCGZ2SsaILbyz31JQ');
-
-    async function sendForm() {
-      console.log('🚀 ОТПРАВКА!');
-      const input = document.getElementById('formInput').value.trim();
-      if (!input) return alert('Текст?');
-
-      try {
-        const res = await fetch(JETBOT_WEBHOOK, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({message: input, test: 'browser'})
-        });
-        console.log('✅', res.status);
-        alert('✅ В СУШИМАГ!');
-      } catch(e) {
-        console.error(e);
-        alert('❌ ' + e);
-      }
-    }
-  </script>
+<h2>📝 СУШИМАГ отзыв</h2>
+<textarea id="formInput" placeholder="Ваше мнение..."></textarea>
+<button onclick="sendForm()">📤 Отправить</button>
+<script>
+window.WebApp={initDataUnsafe:{user:{id:999,first_name:'Test'}}};
+const JETBOT_WEBHOOK='https://api.allorigins.win/get?url='+encodeURIComponent('https://api.jetbot24.ru/hook/674464:xTElBBMqfRILA6lmAhn4fPUqFSuYEmTeCGZ2SsaILbyz31JQ');
+async function sendForm(){console.log('🚀');const input=document.getElementById('formInput').value.trim();if(!input)return alert('Текст?');try{const res=await fetch(JETBOT_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:input,test:'ok'})});const data=await res.json();console.log(data);if(data.status.http_code<400){alert('✅ Отправлено!');document.getElementById('formInput').value='';}else alert('❌ '+data.status.http_code);}catch(e){alert('❌ '+e);}}
+</script>
 </body>
 </html>
