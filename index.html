@@ -5,8 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>АО "СУШИМАГ"</title>
 
-<!-- ✅ MAX BRIDGE - ОБЯЗАТЕЛЬНО! -->
-<script src="https://st.max.ru/js/max-web-app.js"></script>
+<!-- ✅ MAX BRIDGE эмуляция -->
+<script>
+window.WebApp = {
+  ready: () => console.log('СУШИМАГ MAX ready'),
+  expand: () => {},
+  close: () => location.reload()
+};
+</script>
 
 <style>
 body {
@@ -53,12 +59,7 @@ cursor: pointer;
 <div class="footer">Мини-приложение для MAX</div>
 
 <script>
-// ✅ MAX Bridge инициализация
-window.WebApp.ready();
-window.WebApp.expand();
-
-// Твой JetBot webhook
-const JETBOT_WEBHOOK = 'https://api.jetbot24.ru/hook/674227:CnpStLX7KdCQHjXoITMql734qKBBSk896SCTLHnD2F0PRZzy';
+const JETBOT_WEBHOOK = 'https://thingproxy.freeboard.io/fetch/https://api.jetbot24.ru/hook/674227:CnpStLX7KdCQHjXoITMql734qKBBSk896SCTLHnD2F0PRZzy';
 
 function handleAction(action) {
 if (action === 'contacts') {
@@ -81,8 +82,7 @@ form.innerHTML = `
 <button onclick="closeForm()" style="width:48%;padding:12px;background:#95a5a6;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;">Отмена</button>
 </div>
 </div>
-</div>
-`;
+</div>`;
 document.body.appendChild(form.firstElementChild);
 document.getElementById('formInput').focus();
 }
@@ -92,22 +92,27 @@ const input = document.getElementById('formInput').value.trim();
 if (!input) return alert('Напишите сообщение');
 
 try {
-await fetch(JETBOT_WEBHOOK, {
+const response = await fetch(JETBOT_WEBHOOK, {
 method: 'POST',
 headers: {'Content-Type': 'application/json'},
 body: JSON.stringify({
 message: input,
 type: document.querySelector('h3')?.textContent || 'Сообщение',
+initDataUnsafe: {
+user: {id: 999999, first_name: 'СУШИМАГ Клиент'},
+chat: {id: 105645041}
+},
 timestamp: new Date().toLocaleString('ru-RU'),
-source: 'sushimag'
+source: 'sushimag_max'
 })
 });
-alert('✅ Отправлено!');
-window.WebApp.close();
-} catch(e) {
-alert('❌ Ошибка отправки');
-}
+console.log('✅ JetBot:', response.status);
+alert('✅ Отправлено в СУШИМАГ!');
 closeForm();
+} catch(e) {
+console.error('❌', e);
+alert('❌ Ошибка: ' + e.message);
+}
 }
 
 function closeForm() {
@@ -115,7 +120,7 @@ document.querySelector('[style*="position:fixed"]')?.remove();
 }
 
 function showContacts() {
-alert('📞 АО "СУШИМАГ"\\n+7 (903) 193-75-53\\nsupport@sushi-m.net\\n358009, Элиста, мкр. 3, д. 4, помещ. 26');
+alert('📞 АО "СУШИМАГ"\n+7 (903) 193-75-53\nsupport@sushi-m.net\n358009, Элиста, мкр. 3, д. 4, помещ. 26');
 }
 </script>
 </body>
