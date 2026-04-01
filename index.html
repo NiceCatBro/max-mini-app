@@ -29,7 +29,6 @@ button {width:100%;padding:15px;margin:10px 0;border:none;border-radius:12px;fon
 <div class="footer">Мини-приложение для MAX</div>
 
 <script>
-// ✅ Безопасная MAX эмуляция (без max-web-app.js)
 window.WebApp={ready:()=>{},expand:()=>{},close:()=>location.reload()};
 
 function handleAction(action) {
@@ -62,15 +61,14 @@ function sendForm() {
 const input = document.getElementById('formInput').value.trim();
 if (!input) return alert('Напишите сообщение');
 
-// ✅ Запись в URL + копирование (работает ВЕЗДЕ)
-const url = `https://t.me/sushimag_bot?start=feedback_${encodeURIComponent(input)}`;
-navigator.clipboard.writeText(url).then(() => {
-alert('✅ Скопировано в буфер!\n\nВставьте в MAX:\n' + url);
-closeForm();
+// ✅ ПРЯМАЯ ССЫЛКА НА ТВОЙ JETBOT
+const jetbotUrl = `https://max.ru/id7500008890_1_bot?start=sushimag_${encodeURIComponent(input)}`;
+navigator.clipboard.writeText(jetbotUrl).then(() => {
+alert('✅ Скопировано в буфер!\n\n🔗 Откройте в MAX:\n' + jetbotUrl);
 }).catch(() => {
-prompt('Скопируйте ссылку в MAX:', url);
-closeForm();
+prompt('Скопируйте и откройте в MAX:', jetbotUrl);
 });
+closeForm();
 }
 
 function closeForm() {
