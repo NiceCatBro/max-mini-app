@@ -4,46 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>АО "СУШИМАГ"</title>
-
-<!-- ✅ MAX BRIDGE эмуляция -->
-<script>
-window.WebApp = {
-  ready: () => console.log('СУШИМАГ MAX ready'),
-  expand: () => {},
-  close: () => location.reload()
-};
-</script>
-
 <style>
-body {
-font-family: Arial, sans-serif;
-background: #f8f9fa;
-padding: 20px;
-max-width: 400px;
-margin: 0 auto;
-}
-.header { text-align: center; margin-bottom: 30px; }
-.title {
-font-size: 28px;
-color: #e74c3c;
-margin-bottom: 10px;
-font-weight: bold;
-}
-.subtitle { color: #7f8c8d; margin-bottom: 20px; }
-button {
-width: 100%;
-padding: 15px;
-margin: 10px 0;
-border: none;
-border-radius: 12px;
-font-size: 16px;
-color: white;
-cursor: pointer;
-}
-.btn-topic { background: #27ae60; }
-.btn-feedback { background: #f39c12; }
-.btn-contacts { background: #3498db; }
-.footer { text-align: center; margin-top: 20px; font-size: 12px; color: #95a5a6; }
+body {font-family:Arial,sans-serif;background:#f8f9fa;padding:20px;max-width:400px;margin:0 auto;}
+.header {text-align:center;margin-bottom:30px;}
+.title {font-size:28px;color:#e74c3c;margin-bottom:10px;font-weight:bold;}
+.subtitle {color:#7f8c8d;margin-bottom:20px;}
+button {width:100%;padding:15px;margin:10px 0;border:none;border-radius:12px;font-size:16px;color:white;cursor:pointer;}
+.btn-topic {background:#27ae60;}
+.btn-feedback {background:#f39c12;}
+.btn-contacts {background:#3498db;}
+.footer {text-align:center;margin-top:20px;font-size:12px;color:#95a5a6;}
 </style>
 </head>
 <body>
@@ -59,7 +29,8 @@ cursor: pointer;
 <div class="footer">Мини-приложение для MAX</div>
 
 <script>
-const JETBOT_WEBHOOK = 'https://thingproxy.freeboard.io/fetch/https://api.jetbot24.ru/hook/674227:CnpStLX7KdCQHjXoITMql734qKBBSk896SCTLHnD2F0PRZzy';
+// ✅ Безопасная MAX эмуляция (без max-web-app.js)
+window.WebApp={ready:()=>{},expand:()=>{},close:()=>location.reload()};
 
 function handleAction(action) {
 if (action === 'contacts') {
@@ -87,32 +58,19 @@ document.body.appendChild(form.firstElementChild);
 document.getElementById('formInput').focus();
 }
 
-async function sendForm() {
+function sendForm() {
 const input = document.getElementById('formInput').value.trim();
 if (!input) return alert('Напишите сообщение');
 
-try {
-const response = await fetch(JETBOT_WEBHOOK, {
-method: 'POST',
-headers: {'Content-Type': 'application/json'},
-body: JSON.stringify({
-message: input,
-type: document.querySelector('h3')?.textContent || 'Сообщение',
-initDataUnsafe: {
-user: {id: 999999, first_name: 'СУШИМАГ Клиент'},
-chat: {id: 105645041}
-},
-timestamp: new Date().toLocaleString('ru-RU'),
-source: 'sushimag_max'
-})
-});
-console.log('✅ JetBot:', response.status);
-alert('✅ Отправлено в СУШИМАГ!');
+// ✅ Запись в URL + копирование (работает ВЕЗДЕ)
+const url = `https://t.me/sushimag_bot?start=feedback_${encodeURIComponent(input)}`;
+navigator.clipboard.writeText(url).then(() => {
+alert('✅ Скопировано в буфер!\n\nВставьте в MAX:\n' + url);
 closeForm();
-} catch(e) {
-console.error('❌', e);
-alert('❌ Ошибка: ' + e.message);
-}
+}).catch(() => {
+prompt('Скопируйте ссылку в MAX:', url);
+closeForm();
+});
 }
 
 function closeForm() {
