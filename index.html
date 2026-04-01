@@ -59,20 +59,28 @@ document.getElementById('formInput').focus();
 }
 
 function sendForm() {
-const input = document.getElementById('formInput').value.trim();
-if (!input) return alert('Напишите сообщение!');
+  const input = document.getElementById('formInput').value.trim();
+  if (!input) return alert('Напишите сообщение!');
 
-const type = document.querySelector('h3')?.textContent || 'Сообщение';
-const subject = `СУШИМАГ MAX: ${type}`;
-const body = `${input}\n\n👤 Клиент MAX\n⏰ ${new Date().toLocaleString('ru-RU')}\n📱 Мини-приложение`;
+  const type = document.querySelector('h3')?.textContent || 'Сообщение';
 
-window.location.href = `mailto:support@sushi-m.net?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  let subject = 'АО "СУШИМАГ" — Обращение';
+  if (type.includes('Оставить отзыв')) {
+    subject = 'АО "СУШИМАГ" — Отзыв';
+  } else if (type.includes('Предложить тему')) {
+    subject = 'АО "СУШИМАГ" — Предложение темы';
+  }
 
-setTimeout(() => {
-alert('✅ Письмо открыто!\nОтправьте → СУШИМАГ получит за 5 сек!');
-closeForm();
-}, 500);
+  const body = `${input}\n\n👤 Клиент MAX\n⏰ ${new Date().toLocaleString('ru-RU')}\n📱 Мини-приложение`;
+
+  window.location.href = `mailto:support@sushi-m.net?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  setTimeout(() => {
+    alert('✅ Письмо открыто!\nОтправьте → СУШИМАГ получит за 5 сек!');
+    closeForm();
+  }, 500);
 }
+
 
 function closeForm() {
 const modal = document.getElementById('modal');
